@@ -50,7 +50,7 @@ class MessageSerializer:
 
         message_dict = None
         message_json = message_body
-        print(message_json)
+
         try:
             message_dict = json.loads(message_json)
         except ValueError:
