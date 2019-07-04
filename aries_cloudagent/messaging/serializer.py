@@ -24,10 +24,10 @@ class MessageSerializer:
         """Initialize the message serializer instance."""
 
     async def parse_message(
-        self,
-        context: InjectionContext,
-        message_body: Union[str, bytes],
-        transport_type: str,
+            self,
+            context: InjectionContext,
+            message_body: Union[str, bytes],
+            transport_type: str,
     ) -> Tuple[dict, MessageDelivery]:
         """
         Deserialize an incoming message and further populate the request context.
@@ -90,7 +90,7 @@ class MessageSerializer:
         # parse thread ID
         thread_dec = message_dict.get("~thread")
         delivery.thread_id = (
-            thread_dec and thread_dec.get("thid") or message_dict.get("@id")
+                thread_dec and thread_dec.get("thid") or message_dict.get("@id")
         )
 
         # handle transport decorator
@@ -117,12 +117,12 @@ class MessageSerializer:
         return msg_type
 
     async def encode_message(
-        self,
-        context: InjectionContext,
-        message_json: Union[str, bytes],
-        recipient_keys: Sequence[str],
-        routing_keys: Sequence[str],
-        sender_key: str,
+            self,
+            context: InjectionContext,
+            message_json: Union[str, bytes],
+            recipient_keys: Sequence[str],
+            routing_keys: Sequence[str],
+            sender_key: str,
     ) -> Union[str, bytes]:
         """
         Encode an outgoing message for transport.
