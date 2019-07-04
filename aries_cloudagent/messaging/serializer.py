@@ -49,27 +49,9 @@ class MessageSerializer:
         delivery.transport_type = transport_type
 
         message_dict = None
-        print(message_body)
-        # try:
-        #     wallet: BaseWallet = await context.inject(BaseWallet)
-        # except InjectorError:
-        #     raise MessageParseError("Wallet not defined in request context")
-        # try:
-        #     unpacked = await wallet.unpack_message(message_body)
-        #     message_json, delivery.sender_verkey, delivery.recipient_verkey = (
-        #         unpacked
-        #     )
-        # except WalletError:
-        #     LOGGER.debug("Message unpack failed, falling back to JSON")
-        # else:
-        #     try:
-        #         message_json = message_body
-        #         message_dict = json.loads(message_json)
-        #     except ValueError:
-        #         raise MessageParseError("Message JSON parsing failed")
-        #
+        message_json = message_body
+
         try:
-            message_json = message_body
             message_dict = json.loads(message_json)
         except ValueError:
             raise MessageParseError("Message JSON parsing failed")
