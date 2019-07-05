@@ -6,6 +6,7 @@ from aiohttp_apispec import docs, request_schema, response_schema
 from marshmallow import fields, Schema
 
 from .models.wallet_verification_key import WalletVerificationKeySchema
+from .models.message_delivery_details import MessageDeliveryDetailsSchema
 
 from .manager import WalletManager
 
@@ -46,6 +47,22 @@ async def get_verification_key(request: web.BaseRequest):
     }
     return web.json_response(result)
 
+@docs(tags=["wallet"], summary="Get message delivery details")
+@response_schema(MessageDeliveryDetailsSchema(), 200)
+async def get_message_delivery_details(request: web.BaseRequest):
+    """
+    Request handler for unopacking and getting forward details.
+
+    Args:
+        request: aiohttp request object
+
+    Returns:
+        The verification key
+
+    """
+    body = await request.read()
+    return web.json_response(result)
+
 
 async def register(app: web.Application):
     """Register routes."""
@@ -53,5 +70,6 @@ async def register(app: web.Application):
     app.add_routes(
         [
             web.get("/wallet/{id}", get_verification_key),
+            web.post("/wallet/unpack", get_message_delivery_details),
         ]
     )

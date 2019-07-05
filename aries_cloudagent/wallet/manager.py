@@ -4,11 +4,17 @@ import aiohttp
 import logging
 import sys
 
-
+from typing import Union
 from ..error import BaseError
+from .error import WalletError
+from ..messaging.error import MessageParseError
 from ..config.injection_context import InjectionContext
+from ..config.base import InjectorError
 from .base import BaseWallet
 from .models.wallet_verification_key import WalletVerificationKey
+from .models.message_delivery_details import MessageDeliveryDetails
+
+LOGGER = logging.getLogger(__name__)
 
 
 class WalletManagerError(BaseError):
@@ -57,7 +63,6 @@ class WalletManager:
 
         """
         self._log_state("Fetching key")
-        print("Fetching key")
 
         # Create and store new invitation key
         wallet: BaseWallet = await self.context.inject(BaseWallet)
@@ -73,3 +78,33 @@ class WalletManager:
         )
 
         return walletverificationkey
+
+    async def get_message_delivery_details(
+            self,
+            message_body: Union[str, bytes],
+    ) -> MessageDeliveryDetails:
+        """
+        Unpacks message and gets the forwarding address for the next cloud agent
+
+        """
+        self._log_state("Unpacking Message")
+
+        try:
+            wallet: BaseWallet = await self.context.inject(BaseWallet)
+        except InjectorError:
+            raise MessageParseError("Wallet not defined in request context")
+
+        try:
+            unpacked = await wallet.unpack_message(message_body)
+            message_json, sender_verkey, recipient_verkey = (
+                unpacked
+            )
+        except WalletError:
+            LOGGER.debug("Message unpack failed, falling back to JSON")
+
+        self._log_state(
+            "Fetched Message Delivery Details",
+        )
+        print(message_json)
+
+        return None
