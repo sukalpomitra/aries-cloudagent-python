@@ -27,18 +27,18 @@ class MessageDeliveryDetails(BaseModel):
         msg: str = None,
     ):
         """Initialize a new MessageDeliveryDetails."""
-        self.to = to
-        self.msg = msg
+        self._to = to
+        self._msg = msg
 
     @property
     def to(self) -> str:
         """Accessor for the to address of next cloud agent."""
-        return self.to
+        return self._to
 
     @property
     def msg(self) -> str:
         """Accessor for the encrypted message for next cloud agent."""
-        return self.msg
+        return self._msg
 
 
 class MessageDeliveryDetailsSchema(BaseModelSchema):
