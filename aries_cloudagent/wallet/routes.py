@@ -69,7 +69,7 @@ async def get_message_delivery_details(request: web.BaseRequest):
         "to": messagedeliverydetails.to,
         "msg": messagedeliverydetails.msg
     }
-    print("Result:- " + result)
+    print("Result:- " + messagedeliverydetails.to + " " + messagedeliverydetails.msg)
     return web.json_response(result)
 
 
