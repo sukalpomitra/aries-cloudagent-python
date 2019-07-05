@@ -64,8 +64,11 @@ async def get_message_delivery_details(request: web.BaseRequest):
     context = request.app["request_context"]
     wallet_mgr = WalletManager(context)
     messagedeliverydetails = await wallet_mgr.get_message_delivery_details(body)
-    resp = web.json_response(messagedeliverydetails)
-    print("Response:- " + resp)
+    result = {
+        "to": messagedeliverydetails.to,
+        "msg": messagedeliverydetails.msg
+    }
+    return web.json_response(result)
 
 
 async def register(app: web.Application):
