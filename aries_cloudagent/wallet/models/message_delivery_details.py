@@ -23,15 +23,22 @@ class MessageDeliveryDetails(BaseModel):
     def __init__(
         self,
         *,
-        key: str = None,
+        to: str = None,
+        msg: str = None,
     ):
         """Initialize a new MessageDeliveryDetails."""
-        self._id = key
+        self.to = to
+        self.msg = msg
 
     @property
-    def key(self) -> str:
-        """Accessor for the verification key associated with this wallet."""
-        return self._id
+    def to(self) -> str:
+        """Accessor for the to address of next cloud agent."""
+        return self.to
+
+    @property
+    def msg(self) -> str:
+        """Accessor for the encrypted message for next cloud agent."""
+        return self.msg
 
 
 class MessageDeliveryDetailsSchema(BaseModelSchema):
