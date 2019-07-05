@@ -60,7 +60,7 @@ async def get_message_delivery_details(request: web.BaseRequest):
         The verification key
 
     """
-    print("REACHED SERVER")
+    print("Unpacking message")
     body = await request.read()
     context = request.app["request_context"]
     wallet_mgr = WalletManager(context)
@@ -69,6 +69,7 @@ async def get_message_delivery_details(request: web.BaseRequest):
         "to": messagedeliverydetails.to,
         "msg": messagedeliverydetails.msg
     }
+    print("Result:- " + result)
     return web.json_response(result)
 
 
