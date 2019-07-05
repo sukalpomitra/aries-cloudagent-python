@@ -1,6 +1,7 @@
 """Classes to manage connections."""
 
 import aiohttp
+import json
 import logging
 import sys
 
@@ -64,11 +65,11 @@ class WalletManager:
         """
         self._log_state("Fetching key")
 
-        # Create and store new invitation key
+        # Create and store new registration key
         wallet: BaseWallet = await self.context.inject(BaseWallet)
         connection_key = await wallet.create_signing_key(seed)
         print("Fetching key: " + connection_key.verkey)
-        # Create connection record
+
         walletverificationkey = WalletVerificationKey(
             key=connection_key.verkey,
         )
@@ -99,13 +100,21 @@ class WalletManager:
             message_json, sender_verkey, recipient_verkey = (
                 unpacked
             )
-            print(message_json)
         except WalletError:
-            print("Something failed")
-            LOGGER.debug("Message unpack failed, falling back to JSON")
+            raise MessageParseError("Message unpacking failed")
+
+        try:
+            message_dict = json.loads(message_json)
+        except ValueError:
+            raise MessageParseError("Message JSON parsing failed")
+
+        messagedeliverydetails = MessageDeliveryDetails(
+            to=message_dict.get("to"),
+            msg=message_dict.get("msg"),
+        )
 
         self._log_state(
             "Fetched Message Delivery Details",
         )
 
-        return None
+        return messagedeliverydetails
