@@ -51,7 +51,7 @@ async def get_verification_key(request: web.BaseRequest):
 @response_schema(MessageDeliveryDetailsSchema(), 200)
 async def get_message_delivery_details(request: web.BaseRequest):
     """
-    Request handler for unopacking and getting forward details.
+    Request handler for unpacking and getting forward details.
 
     Args:
         request: aiohttp request object
@@ -60,6 +60,7 @@ async def get_message_delivery_details(request: web.BaseRequest):
         The verification key
 
     """
+    print("REACHED SERVER")
     body = await request.read()
     context = request.app["request_context"]
     wallet_mgr = WalletManager(context)
