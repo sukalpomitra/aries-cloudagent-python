@@ -99,12 +99,13 @@ class WalletManager:
             message_json, sender_verkey, recipient_verkey = (
                 unpacked
             )
+            print(message_json)
         except WalletError:
+            print("Something failed")
             LOGGER.debug("Message unpack failed, falling back to JSON")
 
         self._log_state(
             "Fetched Message Delivery Details",
         )
-        print(message_json)
 
         return None
