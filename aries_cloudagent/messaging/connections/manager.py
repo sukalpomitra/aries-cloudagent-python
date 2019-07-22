@@ -114,7 +114,7 @@ class ConnectionManager:
 
         """
         self._log_state("Creating invitation")
-        print("Default endpoint: " + self.context.settings.get("default_endpoint"))
+
         if not my_endpoint:
             my_endpoint = self.context.settings.get("default_endpoint")
         if not my_label:
