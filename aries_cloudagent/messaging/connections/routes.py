@@ -152,13 +152,18 @@ async def connections_create_invitation(request: web.BaseRequest):
     """
     context = request.app["request_context"]
     my_label = request.match_info["label"]
+    server = request.match_info["server"]
+    port = request.match_info["port"]
+    my_endpoint = "http://" + server + ":" + port + "/" + request.match_info["endpoint"]
+    print("Generating invitation " + my_endpoint)
     connection_mgr = ConnectionManager(context)
-    connection, invitation = await connection_mgr.create_invitation(my_label)
+    connection, invitation = await connection_mgr.create_invitation(my_label, my_endpoint)
     result = {
         "connection_id": connection.connection_id,
         "invitation": invitation.serialize(),
         "invitation_url": invitation.to_url(),
     }
+    print("Generated invitation")
     return web.json_response(result)
 
 
@@ -323,7 +328,7 @@ async def register(app: web.Application):
         [
             web.get("/connections", connections_list),
             web.get("/connections/{id}", connections_retrieve),
-            web.post("/connections/create-invitation/{label}", connections_create_invitation),
+            web.post("/connections/create-invitation/{label}/{server}/{port}/{endpoint}", connections_create_invitation),
             web.post("/connections/receive-invitation", connections_receive_invitation),
             web.post(
                 "/connections/{id}/accept-invitation", connections_accept_invitation
