@@ -189,7 +189,7 @@ async def connections_create_invitation(request: web.BaseRequest):
     my_label = request.match_info["label"]
     server = request.match_info["server"]
     port = request.match_info["port"]
-    my_endpoint = "http://" + server + ":" + port + "/" + request.match_info["endpoint"]
+    my_endpoint = "http://" + server + ":" + port + "/issuer/v1/" + request.match_info["endpoint"]
     print("Generating invitation " + my_endpoint)
     connection_mgr = ConnectionManager(context)
 
