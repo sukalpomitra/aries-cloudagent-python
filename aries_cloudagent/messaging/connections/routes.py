@@ -174,6 +174,7 @@ async def connections_create_invitation(request: web.BaseRequest):
 
     """
     context = request.app["request_context"]
+
     accept = request.query.get("accept")
     public = request.query.get("public")
 
@@ -184,6 +185,11 @@ async def connections_create_invitation(request: web.BaseRequest):
     connection, invitation = await connection_mgr.create_invitation(
         accept=accept, public=bool(public)
     )
+
+    my_label = request.match_info["label"]
+    connection_mgr = ConnectionManager(context)
+    connection, invitation = await connection_mgr.create_invitation(my_label)
+
     result = {
         "connection_id": connection and connection.connection_id,
         "invitation": invitation.serialize(),
@@ -361,7 +367,7 @@ async def register(app: web.Application):
         [
             web.get("/connections", connections_list),
             web.get("/connections/{id}", connections_retrieve),
-            web.post("/connections/create-invitation", connections_create_invitation),
+            web.post("/connections/create-invitation/{label}", connections_create_invitation),
             web.post("/connections/receive-invitation", connections_receive_invitation),
             web.post(
                 "/connections/{id}/accept-invitation", connections_accept_invitation
