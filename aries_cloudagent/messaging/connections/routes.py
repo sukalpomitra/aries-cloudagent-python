@@ -151,8 +151,9 @@ async def connections_create_invitation(request: web.BaseRequest):
 
     """
     context = request.app["request_context"]
+    my_label = request.match_info["label"]
     connection_mgr = ConnectionManager(context)
-    connection, invitation = await connection_mgr.create_invitation()
+    connection, invitation = await connection_mgr.create_invitation(my_label)
     result = {
         "connection_id": connection.connection_id,
         "invitation": invitation.serialize(),
@@ -322,7 +323,7 @@ async def register(app: web.Application):
         [
             web.get("/connections", connections_list),
             web.get("/connections/{id}", connections_retrieve),
-            web.post("/connections/create-invitation", connections_create_invitation),
+            web.post("/connections/create-invitation/{label}", connections_create_invitation),
             web.post("/connections/receive-invitation", connections_receive_invitation),
             web.post(
                 "/connections/{id}/accept-invitation", connections_accept_invitation
