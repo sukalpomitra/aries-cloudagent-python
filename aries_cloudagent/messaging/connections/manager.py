@@ -117,17 +117,10 @@ class ConnectionManager:
 
         """
         self._log_state("Creating invitation")
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-=======
-        print("Default endpoint: " + self.context.settings.get("default_endpoint"))
-=======
-
->>>>>>> no print
         if not my_endpoint:
             my_endpoint = self.context.settings.get("default_endpoint")
->>>>>>> endpoint
+
         if not my_label:
             my_label = self.context.settings.get("default_label")
         wallet: BaseWallet = await self.context.inject(BaseWallet)
