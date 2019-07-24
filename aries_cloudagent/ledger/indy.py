@@ -441,10 +441,12 @@ class IndyLedger(BaseLedger):
         """
         nym = self.did_to_nym(did)
         public_did = await self.wallet.get_public_did()
+        print("Public did: " + public_did)
         with IndyErrorHandler("Exception when building attribute request"):
             request_json = await indy.ledger.build_get_attrib_request(
                 public_did and public_did.did, nym, "endpoint", None, None
             )
+        print("Request: " + request_json)
         response_json = await self._submit(request_json, sign=bool(public_did))
         endpoint_json = json.loads(response_json)["result"]["data"]
         if endpoint_json:
@@ -470,9 +472,7 @@ class IndyLedger(BaseLedger):
                 request_json = await indy.ledger.build_attrib_request(
                     nym, nym, None, attr_json, None
                 )
-            print("Request: " + str(request_json))
             await self._submit(request_json)
-            print("true")
             return True
         print("false")
         return False
