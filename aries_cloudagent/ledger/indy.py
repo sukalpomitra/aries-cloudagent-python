@@ -463,8 +463,6 @@ class IndyLedger(BaseLedger):
             transport_vk: The endpoint transport verkey
         """
         exist_endpoint = await self.get_endpoint_for_did(did)
-        print("exist " + str(exist_endpoint))
-        print("end" + str(endpoint))
         if exist_endpoint != endpoint:
             nym = self.did_to_nym(did)
             attr_json = json.dumps({"endpoint": {"endpoint": endpoint}})
