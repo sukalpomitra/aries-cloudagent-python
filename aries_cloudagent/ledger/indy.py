@@ -452,7 +452,6 @@ class IndyLedger(BaseLedger):
             address = json.loads(endpoint_json)["endpoint"].get("endpoint", None)
         else:
             address = None
-        print("Address: " + str(address))
         return address
 
     async def update_endpoint_for_did(self, did: str, endpoint: str) -> bool:
@@ -464,6 +463,8 @@ class IndyLedger(BaseLedger):
             transport_vk: The endpoint transport verkey
         """
         exist_endpoint = await self.get_endpoint_for_did(did)
+        print("exist " + str(exist_endpoint))
+        print("end" + str(endpoint))
         if exist_endpoint != endpoint:
             nym = self.did_to_nym(did)
             attr_json = json.dumps({"endpoint": {"endpoint": endpoint}})
@@ -473,7 +474,6 @@ class IndyLedger(BaseLedger):
                 )
             await self._submit(request_json)
             return True
-        print("false")
         return False
 
     def nym_to_did(self, nym: str) -> str:
