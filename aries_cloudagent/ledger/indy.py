@@ -462,7 +462,6 @@ class IndyLedger(BaseLedger):
             endpoint: The endpoint address
             transport_vk: The endpoint transport verkey
         """
-        print("I am here")
         exist_endpoint = await self.get_endpoint_for_did(did)
         if exist_endpoint != endpoint:
             nym = self.did_to_nym(did)
@@ -471,6 +470,7 @@ class IndyLedger(BaseLedger):
                 request_json = await indy.ledger.build_attrib_request(
                     nym, nym, None, attr_json, None
                 )
+            print("Request: " + str(request_json))
             await self._submit(request_json)
             return True
         return False
