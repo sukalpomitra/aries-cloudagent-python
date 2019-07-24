@@ -439,8 +439,11 @@ class IndyLedger(BaseLedger):
         Args:
             did: The DID to look up on the ledger or in the cache
         """
+        print("H")
         nym = self.did_to_nym(did)
+        print("E")
         public_did = await self.wallet.get_public_did()
+        print("L")
         print("Public did: " + str(public_did))
         with IndyErrorHandler("Exception when building attribute request"):
             request_json = await indy.ledger.build_get_attrib_request(
