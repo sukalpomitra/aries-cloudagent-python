@@ -462,6 +462,7 @@ class IndyLedger(BaseLedger):
             endpoint: The endpoint address
             transport_vk: The endpoint transport verkey
         """
+        print("I am here")
         exist_endpoint = await self.get_endpoint_for_did(did)
         if exist_endpoint != endpoint:
             nym = self.did_to_nym(did)
