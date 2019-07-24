@@ -472,7 +472,9 @@ class IndyLedger(BaseLedger):
                 )
             print("Request: " + str(request_json))
             await self._submit(request_json)
+            print("true")
             return True
+        print("false")
         return False
 
     def nym_to_did(self, nym: str) -> str:
