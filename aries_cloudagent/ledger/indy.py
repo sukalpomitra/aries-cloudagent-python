@@ -221,7 +221,6 @@ class IndyLedger(BaseLedger):
             )
 
         elif operation == "REPLY":
-            print("Got reply from ledger")
             return request_result_json
 
         else:
