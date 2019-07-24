@@ -185,12 +185,12 @@ class IndyLedger(BaseLedger):
             sign: whether or not to sign the request
 
         """
-        print("H")
+
         if not self.pool_handle:
             raise ClosedPoolError(
                 "Cannot sign and submit request to closed pool {}".format(self.name)
             )
-        print("E")
+
         if sign:
             public_did = await self.wallet.get_public_did()
             if not public_did:
@@ -205,10 +205,9 @@ class IndyLedger(BaseLedger):
             "Exception raised by ledger transaction", LedgerTransactionError
         ):
             request_result_json = await submit_op
-        print("E")
+
         request_result = json.loads(request_result_json)
-        print("L")
-        print("Result: " + str(request_result))
+
         operation = request_result.get("op", "")
 
         # HACK: If only there were a better way to identify this kind
@@ -222,6 +221,7 @@ class IndyLedger(BaseLedger):
             )
 
         elif operation == "REPLY":
+            print("Got reply from ledger")
             return request_result_json
 
         else:
@@ -446,14 +446,13 @@ class IndyLedger(BaseLedger):
             request_json = await indy.ledger.build_get_attrib_request(
                 public_did and public_did.did, nym, "endpoint", None, None
             )
-        print("Request: " + request_json)
         response_json = await self._submit(request_json, sign=bool(public_did))
         endpoint_json = json.loads(response_json)["result"]["data"]
         if endpoint_json:
             address = json.loads(endpoint_json)["endpoint"].get("endpoint", None)
         else:
             address = None
-
+        print("Address: " + str(address))
         return address
 
     async def update_endpoint_for_did(self, did: str, endpoint: str) -> bool:
