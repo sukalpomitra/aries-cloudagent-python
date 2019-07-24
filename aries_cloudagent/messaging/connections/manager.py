@@ -128,7 +128,7 @@ class ConnectionManager:
         if public:
             if not self.context.settings.get("public_invites"):
                 raise ConnectionManagerError("Public invitations are not enabled")
-
+            print("Generating inviataion with puiblic did")
             public_did = await wallet.get_public_did()
             if not public_did:
                 raise ConnectionManagerError(
@@ -143,6 +143,7 @@ class ConnectionManager:
         if not my_endpoint:
             my_endpoint = self.context.settings.get("default_endpoint")
         if not accept and self.context.settings.get("debug.auto_accept_requests"):
+            print("Auto Accepting connection")
             accept = ConnectionRecord.ACCEPT_AUTO
 
         # Create and store new invitation key
