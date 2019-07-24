@@ -7,6 +7,7 @@ from marshmallow import fields, Schema
 
 from .models.wallet_verification_key import WalletVerificationKeySchema
 from .models.message_delivery_details import MessageDeliveryDetailsSchema
+from .models.nyminfo import NymInfoSchema
 
 from .manager import WalletManager
 
@@ -15,6 +16,11 @@ class VerificationKeySchema(Schema):
     """Result schema for getting verification key."""
 
     results = fields.List(fields.Nested(WalletVerificationKeySchema()))
+
+class NymInfoSchema(Schema):
+    """Result schema for getting public did."""
+
+    results = fields.List(fields.Nested(NymInfoSchema()))
 
 
 @docs(
@@ -44,6 +50,28 @@ async def get_verification_key(request: web.BaseRequest):
     walletverificationkey = await wallet_mgr.get_verification_key(seed)
     result = {
         "key": walletverificationkey.key,
+    }
+    return web.json_response(result)
+
+@docs(tags=["wallet"], summary="Get Public DID")
+@response_schema(NymInfoSchema(), 200)
+async def get_public_did(request: web.BaseRequest):
+    """
+    Request handler for getting public did.
+
+    Args:
+        request: aiohttp request object
+
+    Returns:
+        The public did
+
+    """
+    context = request.app["request_context"]
+
+    wallet_mgr = WalletManager(context)
+    nyminfo = await wallet_mgr.get_public_did()
+    result = {
+        "did": nyminfo.did,
     }
     return web.json_response(result)
 
@@ -79,5 +107,6 @@ async def register(app: web.Application):
         [
             web.get("/wallet/{id}", get_verification_key),
             web.post("/wallet/unpack", get_message_delivery_details),
+            web.get("/wallet/public/did", get_public_did),
         ]
     )

@@ -14,6 +14,7 @@ from ..config.base import InjectorError
 from .base import BaseWallet
 from .models.wallet_verification_key import WalletVerificationKey
 from .models.message_delivery_details import MessageDeliveryDetails
+from .models.nyminfo import NymInfo
 
 LOGGER = logging.getLogger(__name__)
 
@@ -79,6 +80,41 @@ class WalletManager:
         )
 
         return walletverificationkey
+
+    @property
+    def context(self) -> InjectionContext:
+        """
+        Accessor for the current injection context.
+
+        Returns:
+            The injection context for this connection manager
+
+        """
+        return self._context
+
+    async def get_public_did(
+            self,
+    ) -> WalletVerificationKey:
+        """
+        Gets the verification key of the wallet
+
+        """
+        self._log_state("Fetching public did")
+
+        # Create and store new registration key
+        wallet: BaseWallet = await self.context.inject(BaseWallet)
+        did_info = await wallet.get_public_did()
+        print("Fetching did: " + did_info.did)
+
+        nyminfo = NymInfo(
+            did=did_info.did,
+        )
+
+        self._log_state(
+            "Fetched Public Did",
+        )
+
+        return nyminfo
 
     async def get_message_delivery_details(
             self,
