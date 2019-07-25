@@ -181,14 +181,8 @@ async def connections_create_invitation(request: web.BaseRequest):
     if public and not context.settings.get("public_invites"):
         raise web.HTTPForbidden()
 
-    my_label = request.match_info["label"]
-    server = request.match_info["server"]
-    port = request.match_info["port"]
-    my_endpoint = "http://" + server + ":" + port + "/issuer/v1/" + request.match_info["endpoint"]
-    print("Generating invitation " + my_endpoint)
     connection_mgr = ConnectionManager(context)
-    connection, invitation = await connection_mgr.create_invitation(my_label, my_endpoint, accept=accept,
-                                                                    public=bool(public))
+    connection, invitation = await connection_mgr.create_invitation(accept=accept, public=bool(public))
 
     result = {
         "connection_id": connection and connection.connection_id,
@@ -368,7 +362,7 @@ async def register(app: web.Application):
         [
             web.get("/connections", connections_list),
             web.get("/connections/{id}", connections_retrieve),
-            web.post("/connections/create-invitation/{label}/{server}/{port}/{endpoint}", connections_create_invitation),
+            web.post("/connections/create-invitation", connections_create_invitation),
             web.post("/connections/receive-invitation", connections_receive_invitation),
             web.post(
                 "/connections/{id}/accept-invitation", connections_accept_invitation
