@@ -77,6 +77,7 @@ class ConnectionManager:
         their_role: str = None,
         accept: str = None,
         public: bool = False,
+        sso: bool = False,
     ) -> Tuple[ConnectionRecord, ConnectionInvitation]:
         """
         Generate new connection invitation.
@@ -136,7 +137,7 @@ class ConnectionManager:
                 )
             # FIXME - allow ledger instance to format public DID with prefix?
             invitation = ConnectionInvitation(
-                label=my_label, did=f"did:sov:{public_did.did}"
+                label=my_label, did=f"did:sov:{public_did.did}", sso=sso
             )
             return None, invitation
 
@@ -156,6 +157,7 @@ class ConnectionManager:
             their_role=their_role,
             state=ConnectionRecord.STATE_INVITATION,
             accept=accept,
+            sso=sso,
         )
 
         await connection.save(self.context)

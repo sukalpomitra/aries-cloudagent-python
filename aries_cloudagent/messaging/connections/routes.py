@@ -113,6 +113,7 @@ async def connections_list(request: web.BaseRequest):
         "state",
         "their_did",
         "their_role",
+        "sso",
     ):
         if param_name in request.query and request.query[param_name] != "":
             tag_filter[param_name] = request.query[param_name]
@@ -177,12 +178,13 @@ async def connections_create_invitation(request: web.BaseRequest):
 
     accept = request.query.get("accept")
     public = request.query.get("public")
+    sso = request.query.get("sso")
 
     if public and not context.settings.get("public_invites"):
         raise web.HTTPForbidden()
 
     connection_mgr = ConnectionManager(context)
-    connection, invitation = await connection_mgr.create_invitation(accept=accept, public=bool(public))
+    connection, invitation = await connection_mgr.create_invitation(accept=accept, public=bool(public), sso=bool(sso))
 
     result = {
         "connection_id": connection and connection.connection_id,

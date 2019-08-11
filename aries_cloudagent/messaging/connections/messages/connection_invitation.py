@@ -34,6 +34,7 @@ class ConnectionInvitation(AgentMessage):
         endpoint: str = None,
         routing_keys: Sequence[str] = None,
         image_url: str = None,
+        sso: bool = None,
         **kwargs,
     ):
         """
@@ -52,6 +53,7 @@ class ConnectionInvitation(AgentMessage):
         self.recipient_keys = list(recipient_keys) if recipient_keys else None
         self.endpoint = endpoint
         self.routing_keys = list(routing_keys) if routing_keys else None
+        self.sso = sso
 
     def to_url(self) -> str:
         """

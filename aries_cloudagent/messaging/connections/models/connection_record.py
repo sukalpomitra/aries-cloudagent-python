@@ -73,6 +73,7 @@ class ConnectionRecord(BaseModel):
         accept: str = None,
         created_at: str = None,
         updated_at: str = None,
+        sso: bool = False,
     ):
         """Initialize a new ConnectionRecord."""
         self._id = connection_id
@@ -91,6 +92,7 @@ class ConnectionRecord(BaseModel):
         self.created_at = created_at
         self.updated_at = updated_at
         self._admin_timer = None
+        self.sso = sso
 
     @property
     def connection_id(self) -> str:
@@ -133,6 +135,7 @@ class ConnectionRecord(BaseModel):
             "state",
             "routing_state",
             "accept",
+            "sso",
         ):
             val = getattr(self, prop)
             if val:
@@ -150,6 +153,7 @@ class ConnectionRecord(BaseModel):
         if not self._id:
             self._id = str(uuid.uuid4())
             self.created_at = self.updated_at
+            print(str(self.storage_record))
             await storage.add_record(self.storage_record)
         else:
             record = self.storage_record
@@ -279,6 +283,8 @@ class ConnectionRecord(BaseModel):
         found = await storage.search_records(cls.RECORD_TYPE, tag_filter).fetch_all()
         result = []
         for record in found:
+            print(str(record.value))
+            print(str(record.tags))
             vals = json.loads(record.value)
             vals.update(record.tags)
             result.append(ConnectionRecord(connection_id=record.id, **vals))
@@ -480,3 +486,4 @@ class ConnectionRecordSchema(BaseModelSchema):
     error_msg = fields.Str(required=False)
     created_at = fields.Str(required=False)
     updated_at = fields.Str(required=False)
+    sso = fields.Str(required=False)
