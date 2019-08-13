@@ -53,7 +53,7 @@ class ConnectionInvitation(AgentMessage):
         self.recipient_keys = list(recipient_keys) if recipient_keys else None
         self.endpoint = endpoint
         self.routing_keys = list(routing_keys) if routing_keys else None
-        self.sso = sso
+        self.sso = str(sso)
 
     def to_url(self) -> str:
         """
@@ -102,6 +102,7 @@ class ConnectionInvitationSchema(AgentMessageSchema):
     endpoint = fields.Str(data_key="serviceEndpoint", required=False)
     routing_keys = fields.List(fields.Str(), data_key="routingKeys", required=False)
     image_url = fields.Str(data_key="imageUrl", required=False, allow_none=True)
+    sso = fields.Str(data_key="sso", required=False, allow_none=True)
 
     @validates_schema
     def validate_fields(self, data):

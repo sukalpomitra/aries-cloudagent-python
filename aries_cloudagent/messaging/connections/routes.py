@@ -148,6 +148,27 @@ async def connections_retrieve(request: web.BaseRequest):
         raise web.HTTPNotFound()
     return web.json_response(record.serialize())
 
+@docs(tags=["connection"], summary="Fetch a single connection record by did")
+@response_schema(ConnectionRecordSchema(), 200)
+async def connections_retrieve_by_did(request: web.BaseRequest):
+    """
+    Request handler for fetching a single connection record.
+
+    Args:
+        request: aiohttp request object
+
+    Returns:
+        The connection record response
+
+    """
+    context = request.app["request_context"]
+    their_did = request.match_info["id"]
+    try:
+        record = await ConnectionRecord.retrieve_by_did(context, their_did)
+    except StorageNotFoundError:
+        raise web.HTTPNotFound()
+    return web.json_response(record.serialize())
+
 
 @docs(
     tags=["connection"],
@@ -364,6 +385,7 @@ async def register(app: web.Application):
         [
             web.get("/connections", connections_list),
             web.get("/connections/{id}", connections_retrieve),
+            web.get("/connections/did/{id}", connections_retrieve_by_did),
             web.post("/connections/create-invitation", connections_create_invitation),
             web.post("/connections/receive-invitation", connections_receive_invitation),
             web.post(

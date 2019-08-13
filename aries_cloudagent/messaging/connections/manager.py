@@ -149,7 +149,7 @@ class ConnectionManager:
 
         # Create and store new invitation key
         connection_key = await wallet.create_signing_key()
-
+        print(sso)
         # Create connection record
         connection = ConnectionRecord(
             initiator=ConnectionRecord.INITIATOR_SELF,
@@ -172,7 +172,7 @@ class ConnectionManager:
         # Note: Need to split this into two stages to support inbound routing of invites
         # Would want to reuse create_did_document and convert the result
         invitation = ConnectionInvitation(
-            label=my_label, recipient_keys=[connection_key.verkey], endpoint=my_endpoint
+            label=my_label, recipient_keys=[connection_key.verkey], endpoint=my_endpoint, sso=sso
         )
         await connection.attach_invitation(self.context, invitation)
 

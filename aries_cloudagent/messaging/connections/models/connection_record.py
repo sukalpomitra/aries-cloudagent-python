@@ -92,7 +92,7 @@ class ConnectionRecord(BaseModel):
         self.created_at = created_at
         self.updated_at = updated_at
         self._admin_timer = None
-        self.sso = sso
+        self.sso = str(sso)
 
     @property
     def connection_id(self) -> str:
