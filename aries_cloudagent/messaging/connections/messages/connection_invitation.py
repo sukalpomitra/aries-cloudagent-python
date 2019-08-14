@@ -105,6 +105,7 @@ class ConnectionInvitationSchema(AgentMessageSchema):
     routing_keys = fields.List(fields.Str(), data_key="routingKeys", required=False)
     image_url = fields.Str(data_key="imageUrl", required=False, allow_none=True)
     sso = fields.Str(data_key="sso", required=False, allow_none=True)
+    invitation_key = fields.Str(data_key="invitationKey", required=False, allow_none=True)
 
     @validates_schema
     def validate_fields(self, data):
