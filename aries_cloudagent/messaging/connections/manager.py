@@ -172,7 +172,8 @@ class ConnectionManager:
         # Note: Need to split this into two stages to support inbound routing of invites
         # Would want to reuse create_did_document and convert the result
         invitation = ConnectionInvitation(
-            label=my_label, recipient_keys=[connection_key.verkey], endpoint=my_endpoint, sso=sso
+            label=my_label, recipient_keys=[connection_key.verkey], endpoint=my_endpoint, sso=sso,
+            invitation_key=connection.invitation_key
         )
         await connection.attach_invitation(self.context, invitation)
 
